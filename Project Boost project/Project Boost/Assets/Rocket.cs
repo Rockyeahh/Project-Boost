@@ -22,14 +22,16 @@ public class Rocket : MonoBehaviour {
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rigidBody.AddRelativeForce(Vector3.up);
+            rigidBody.AddRelativeForce(Vector3.up); // up uses the y axis.
         }
         if (Input.GetKey(KeyCode.A))
         {
-            print("Roating Left");
+            transform.Rotate(Vector3.forward); // forward uses the z axis. By pressing A the ship goes anti clockwise/minus x. It looks like minus x to me. This is angering me.
+                                               // I guess that forward and backward are not doing what Ben is saying. He probably hasn't noticed that x is the left and or right not z.
+                                               // We won't use the z axis in this 2.5D game. He hasn't mentinoed that it is 2.5D but right now it seems to be that.
         } else if (Input.GetKey(KeyCode.D))
         {
-            print("Rotating Right");
+            transform.Rotate(-Vector3.forward); // You can also use .back
         }
     }
 }
