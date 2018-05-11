@@ -28,6 +28,7 @@ public class Rocket : MonoBehaviour {
         {
             transform.Rotate(Vector3.forward); // forward uses the z axis. By pressing A the ship goes anti clockwise/minus x. It looks like minus x to me. This is angering me.
                                                // I guess that forward and backward are not doing what Ben is saying. He probably hasn't noticed that x is the left and or right not z.
+                                               // The Unity docs state that z is the axis of forward but our game doesn't follow that.
                                                // We won't use the z axis in this 2.5D game. He hasn't mentinoed that it is 2.5D but right now it seems to be that.
         } else if (Input.GetKey(KeyCode.D))
         {
