@@ -8,9 +8,11 @@ public class Rocket : MonoBehaviour {
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
 
-
     Rigidbody rigidBody;
     AudioSource audioSource;
+
+    enum State {Alive, Dying, Transcending}; // Three states that set whether we are moving to a new level/scene or not.
+    State state = State.Alive; // Default is alive because the ship/player is alive at the start of the level.
 
 	// Use this for initialization
 	void Start () {
@@ -21,27 +23,48 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Rotate();
-        Thrust();
+        // TODO: Stop the sound from continuing when state set to Dying.
+        if (state == State.Alive)
+        {
+            Rotate();
+            Thrust();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (state != State.Alive)
+        {
+            return; // return just means end or go no further in this method.
+        }
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 // do nothing
                 break;
             case "Finish":
-                // do nothing
-                print("Finish");
-                SceneManager.LoadScene(1); // Loads scene index 1.
+                state = State.Transcending;
+                Invoke("LoadNextLevel", 1f); // 1f is basically 1 seconds. // parameterise time = Ben puts this here but what does it mean?
                 break;
             default:
-                print ("Dead");
-                SceneManager.LoadScene(0);
+                print("Dead");
+                state = State.Dying;
+               // mainThrust = 0f;
+              //  rcsThrust = 0f;
+                Invoke("LoadFirstLevel", 1f); // parameterise time = Ben puts this here but what does it mean?
                 break;
         }
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1); // Loads scene index 1. TODO: Allow for more than two levels.
+    }
+
+    private void LoadFirstLevel()
+    {
+        SceneManager.LoadScene(0);
     }
 
     private void Thrust()

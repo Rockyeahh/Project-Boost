@@ -43,7 +43,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -89,7 +89,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: 803ffb73a38bacd42b417dc65161c40f,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -1186,7 +1187,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.7476835
+      value: -3.1
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1194,23 +1195,23 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -28.818035
+      value: -29.75
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.224053
+      value: 0.2245471
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.065725744
+      value: -0.013435442
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.015146756
+      value: 0.0030962601
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.9722402
+      value: 0.9743657
       objectReference: {fileID: 0}
     - target: {fileID: 4006582926971890, guid: b917d28ef49acef488f8d9af1a6b5fa8, type: 2}
       propertyPath: m_RootOrder
