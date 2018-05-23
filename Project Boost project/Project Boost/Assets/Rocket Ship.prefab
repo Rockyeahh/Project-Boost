@@ -321,7 +321,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 196c09b8b744bc64ab5e1a24908217c0, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.5
   m_Pitch: 1
@@ -405,3 +405,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rcsThrust: 170
   mainThrust: 20
+  mainEngine: {fileID: 8300000, guid: e6de3cd08620dec4ebbe6a258391356d, type: 3}
+  Death: {fileID: 8300000, guid: 21683c98ab96e4942ad35368d85a6d92, type: 3}
+  Success: {fileID: 8300000, guid: ebdfca9253aeffe49810ef2e8244fc61, type: 3}

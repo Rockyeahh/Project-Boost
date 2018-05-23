@@ -7,6 +7,9 @@ public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] AudioClip mainEngine; // inspector reference box.
+    [SerializeField] AudioClip Death;
+    [SerializeField] AudioClip Success;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -14,8 +17,8 @@ public class Rocket : MonoBehaviour {
     enum State {Alive, Dying, Transcending}; // Three states that set whether we are moving to a new level/scene or not.
     State state = State.Alive; // Default is alive because the ship/player is alive at the start of the level.
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         rigidBody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
 
@@ -26,8 +29,8 @@ public class Rocket : MonoBehaviour {
         // TODO: Stop the sound from continuing when state set to Dying.
         if (state == State.Alive)
         {
-            Rotate();
-            Thrust();
+            RespondToRotateInput();
+            RespondToThrustInput();
         }
     }
 
@@ -41,20 +44,31 @@ public class Rocket : MonoBehaviour {
         switch (collision.gameObject.tag)
         {
             case "Friendly":
-                // do nothing
+                // don't die
                 break;
             case "Finish":
-                state = State.Transcending;
-                Invoke("LoadNextLevel", 1f); // 1f is basically 1 seconds. // parameterise time = Ben puts this here but what does it mean?
+                StartSuccessSequence();
                 break;
             default:
-                print("Dead");
-                state = State.Dying;
-               // mainThrust = 0f;
-              //  rcsThrust = 0f;
-                Invoke("LoadFirstLevel", 1f); // parameterise time = Ben puts this here but what does it mean?
+                StartDeathSequence();
                 break;
         }
+    }
+
+    private void StartSuccessSequence()
+    {
+        state = State.Transcending;
+        audioSource.Stop();
+        audioSource.PlayOneShot(Success);
+        Invoke("LoadNextLevel", 2f); // 1f is basically 1 seconds. // parameterise time = Ben puts this here but what does it mean?
+    }
+
+    private void StartDeathSequence()
+    {
+        state = State.Dying;
+        audioSource.Stop();
+        audioSource.PlayOneShot(Death);
+        Invoke("LoadFirstLevel", 3f); // parameterise time = Ben puts this here but what does it mean?
     }
 
     private void LoadNextLevel()
@@ -67,22 +81,28 @@ public class Rocket : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
-    private void Thrust()
+    private void RespondToThrustInput()
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rigidBody.AddRelativeForce(Vector3.up * mainThrust); // up uses the y axis.
-            if (!audioSource.isPlaying) // So that it doesn't keep playing the same clip on top of eachother.
-            {
-                audioSource.Play();
-            }
-        } else
+            ApplyThrust();
+        }
+        else
         {
             audioSource.Stop();
         }
     }
 
-    private void Rotate()
+    private void ApplyThrust()
+    {
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust); // up uses the y axis.
+        if (!audioSource.isPlaying && state == State.Alive) // So that it doesn't keep playing the same clip on top of eachother.
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
+    }
+
+    private void RespondToRotateInput()
     {
         rigidBody.freezeRotation = true; // take manual control of rotation (ignores physics collisions)
 
