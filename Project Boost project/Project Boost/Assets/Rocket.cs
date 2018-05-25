@@ -3,13 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour {
 
-    // TODO: Fix the lighting bug.
-
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+
     [SerializeField] AudioClip mainEngine; // inspector reference box.
     [SerializeField] AudioClip Death;
     [SerializeField] AudioClip Success;
+
+    [SerializeField] ParticleSystem mainEngineParticles; // inspector reference box.
+    [SerializeField] ParticleSystem deathParticles;
+    [SerializeField] ParticleSystem successParticles;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -26,7 +29,6 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        // TODO: Stop the sound from continuing when state set to Dying.
         if (state == State.Alive)
         {
             RespondToRotateInput();
@@ -60,6 +62,7 @@ public class Rocket : MonoBehaviour {
         state = State.Transcending;
         audioSource.Stop();
         audioSource.PlayOneShot(Success);
+        successParticles.Play();
         Invoke("LoadNextLevel", 2f); // 1f is basically 1 seconds. // parameterise time = Ben puts this here but what does it mean?
     }
 
@@ -68,6 +71,7 @@ public class Rocket : MonoBehaviour {
         state = State.Dying;
         audioSource.Stop();
         audioSource.PlayOneShot(Death);
+        deathParticles.Play();
         Invoke("LoadFirstLevel", 3f); // parameterise time = Ben puts this here but what does it mean?
     }
 
@@ -90,6 +94,7 @@ public class Rocket : MonoBehaviour {
         else
         {
             audioSource.Stop();
+            mainEngineParticles.Stop();
         }
     }
 
@@ -99,6 +104,7 @@ public class Rocket : MonoBehaviour {
         if (!audioSource.isPlaying && state == State.Alive) // So that it doesn't keep playing the same clip on top of eachother.
         {
             audioSource.PlayOneShot(mainEngine);
+            mainEngineParticles.Play();
         }
     }
 
