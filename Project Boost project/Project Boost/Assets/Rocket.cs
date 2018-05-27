@@ -100,7 +100,7 @@ public class Rocket : MonoBehaviour {
 
     private void ApplyThrust()
     {
-        rigidBody.AddRelativeForce(Vector3.up * mainThrust); // up uses the y axis.
+        rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime); // up uses the y axis.
         if (!audioSource.isPlaying && state == State.Alive) // So that it doesn't keep playing the same clip on top of eachother.
         {
             audioSource.PlayOneShot(mainEngine);
