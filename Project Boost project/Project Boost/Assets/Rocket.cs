@@ -5,6 +5,7 @@ public class Rocket : MonoBehaviour {
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] float levelLoadDelay = 2f; // levelLoadDelay currently makes the start and death use the same time. If they need to be a diferent a seperate levelLoadDelay would need to be written.
 
     [SerializeField] AudioClip mainEngine; // inspector reference box.
     [SerializeField] AudioClip Death;
@@ -63,7 +64,7 @@ public class Rocket : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot(Success);
         successParticles.Play();
-        Invoke("LoadNextLevel", 2f); // 1f is basically 1 seconds. // parameterise time = Ben puts this here but what does it mean?
+        Invoke("LoadNextLevel", levelLoadDelay);
     }
 
     private void StartDeathSequence()
@@ -72,7 +73,7 @@ public class Rocket : MonoBehaviour {
         audioSource.Stop();
         audioSource.PlayOneShot(Death);
         deathParticles.Play();
-        Invoke("LoadFirstLevel", 3f); // parameterise time = Ben puts this here but what does it mean?
+        Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
     private void LoadNextLevel()

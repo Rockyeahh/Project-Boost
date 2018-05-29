@@ -11,15 +11,13 @@ public class Oscillator : MonoBehaviour {
     float movementFactor; // 0 for not moved, 1 for fully moved. Range and serialize work together to make a slider.
     Vector3 startingPos;
 
-	// Use this for initialization
 	void Start () {
         startingPos = transform.position; // sets the startingPos because otherwise it wouldn't set itself before update tried to do anything. It's like starting the call without knowing where the peddles are.
 	}
 	
-	// Update is called once per frame
 	void Update () {
         // TODO protect against period is zero.
-
+        if (period <= Mathf.Epsilon) { return; }
         float cycles = Time.time / period; // What? If the game time is whatever in seconds then it would be divided by the period of 2f
                                            // then it'd be that in the float cycles.    AND cause it's in update, it grows continually from 0 each frame.
 
