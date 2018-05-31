@@ -97,14 +97,16 @@ public class Rocket : MonoBehaviour {
         Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
+    private void LoadNextLevel()
+    {
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        int NextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1; // supposed to be different? Maybe 
+        SceneManager.LoadScene(NextSceneIndex);
+    }
+
     private void LoadFirstLevel()
     {
         SceneManager.LoadScene(0);
-    }
-
-    private void LoadNextLevel()
-    {
-        SceneManager.LoadScene(1); // Loads scene index 1. TODO: Allow for more than two levels.
     }
 
     private void RespondToThrustInput()
