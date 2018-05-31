@@ -21,6 +21,8 @@ public class Rocket : MonoBehaviour {
     enum State {Alive, Dying, Transcending}; // Three states that set whether we are moving to a new level/scene or not.
     State state = State.Alive; // Default is alive because the ship/player is alive at the start of the level.
 
+    bool CollisionsAreEnabled = true;
+
     // Use this for initialization
     void Start () {
         rigidBody = GetComponent<Rigidbody>();
@@ -35,15 +37,33 @@ public class Rocket : MonoBehaviour {
             RespondToRotateInput();
             RespondToThrustInput();
         }
+        if (Debug.isDebugBuild) // checks if it's the development build.
+        {
+            RespondToDebugKeys();
+        }
+    }
+
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            print("stop collisions");
+            CollisionsAreEnabled = false;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (state != State.Alive)
+        if (state != State.Alive || !CollisionsAreEnabled)
         {
-            return; // return just means end or go no further in this method.
+            return;
         }
 
+        {
         switch (collision.gameObject.tag)
         {
             case "Friendly":
@@ -55,6 +75,7 @@ public class Rocket : MonoBehaviour {
             default:
                 StartDeathSequence();
                 break;
+        }
         }
     }
 
@@ -76,14 +97,14 @@ public class Rocket : MonoBehaviour {
         Invoke("LoadFirstLevel", levelLoadDelay);
     }
 
-    private void LoadNextLevel()
-    {
-        SceneManager.LoadScene(1); // Loads scene index 1. TODO: Allow for more than two levels.
-    }
-
     private void LoadFirstLevel()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void LoadNextLevel()
+    {
+        SceneManager.LoadScene(1); // Loads scene index 1. TODO: Allow for more than two levels.
     }
 
     private void RespondToThrustInput()
