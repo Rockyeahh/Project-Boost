@@ -99,8 +99,12 @@ public class Rocket : MonoBehaviour {
 
     private void LoadNextLevel()
     {
-        int currentScene = SceneManager.GetActiveScene().buildIndex;
-        int NextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1; // supposed to be different? Maybe 
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        int NextSceneIndex = currentSceneIndex + 1;
+        if (NextSceneIndex == SceneManager.sceneCountInBuildSettings) //  staic int number of scenes in the build order.
+        {
+            NextSceneIndex = 0; // loop back to the first level.
+        }
         SceneManager.LoadScene(NextSceneIndex);
     }
 
