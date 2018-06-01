@@ -18,9 +18,10 @@ public class Rocket : MonoBehaviour {
     Rigidbody rigidBody;
     AudioSource audioSource;
 
-    enum State {Alive, Dying, Transcending}; // Three states that set whether we are moving to a new level/scene or not.
-    State state = State.Alive; // Default is alive because the ship/player is alive at the start of the level.
+    // enum State {Alive, Dying, Transcending}; // Three states that set whether we are moving to a new level/scene or not.
+    // State state = State.Alive; // Default is alive because the ship/player is alive at the start of the level.
 
+    bool isTransitioning = false;
     bool CollisionsAreEnabled = true;
 
     // Use this for initialization
@@ -32,7 +33,7 @@ public class Rocket : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (state == State.Alive)
+        if (!isTransitioning)
         {
             RespondToRotateInput();
             RespondToThrustInput();
@@ -58,7 +59,7 @@ public class Rocket : MonoBehaviour {
 
     void OnCollisionEnter(Collision collision)
     {
-        if (state != State.Alive || !CollisionsAreEnabled)
+        if (isTransitioning || !CollisionsAreEnabled)
         {
             return;
         }
@@ -81,7 +82,7 @@ public class Rocket : MonoBehaviour {
 
     private void StartSuccessSequence()
     {
-        state = State.Transcending;
+        isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(Success);
         successParticles.Play();
@@ -90,7 +91,7 @@ public class Rocket : MonoBehaviour {
 
     private void StartDeathSequence()
     {
-        state = State.Dying;
+        isTransitioning = true;
         audioSource.Stop();
         audioSource.PlayOneShot(Death);
         deathParticles.Play();
@@ -121,15 +122,20 @@ public class Rocket : MonoBehaviour {
         }
         else
         {
-            audioSource.Stop();
-            mainEngineParticles.Stop();
+            StopApplyingThrust();
         }
+    }
+
+    private void StopApplyingThrust()
+    {
+        audioSource.Stop();
+        mainEngineParticles.Stop();
     }
 
     private void ApplyThrust()
     {
         rigidBody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime); // up uses the y axis.
-        if (!audioSource.isPlaying && state == State.Alive) // So that it doesn't keep playing the same clip on top of eachother.
+        if (!audioSource.isPlaying && isTransitioning) // So that it doesn't keep playing the same clip on top of eachother.
         {
             audioSource.PlayOneShot(mainEngine);
             mainEngineParticles.Play();
@@ -138,7 +144,7 @@ public class Rocket : MonoBehaviour {
 
     private void RespondToRotateInput()
     {
-        rigidBody.freezeRotation = true; // take manual control of rotation (ignores physics collisions)
+        rigidBody.angularVelocity = Vector3.zero; // remove rotation due to physics.
 
         float rotationThisFrame = rcsThrust * Time.deltaTime; // rotationThisFrame based on the thrust.
 
@@ -154,7 +160,5 @@ public class Rocket : MonoBehaviour {
         {
             transform.Rotate(-Vector3.forward * rotationThisFrame); // You can also use .back
         }
-
-        rigidBody.freezeRotation = false; // resume physics engine control of rotation
     }
 }
